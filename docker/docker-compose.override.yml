@@ -1,0 +1,12 @@
+version: '2.1'
+services:
+  app:
+    container_name: whiteboard
+    command: python run.py
+
+  tests:
+    extends:
+      file: docker-compose.yml
+      service: app
+    container_name: whiteboard-tests
+    command: ptw ./ -- -s
