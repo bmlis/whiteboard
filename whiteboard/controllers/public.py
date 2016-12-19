@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flask import Blueprint
 
-public = Blueprint('frontend', __name__)
+public = Blueprint('public', __name__)
 
 
 @public.route("/")

@@ -1,6 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from uuid import uuid4
 
+from whiteboard.models.workout import Workout
+
 
 class Repository(metaclass=ABCMeta):
 
@@ -9,11 +11,11 @@ class Repository(metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def create(self, obj):
+    def store(self, obj):
         pass
 
     @abstractmethod
-    def delete(self, obj):
+    def get_all(self):
         pass
 
 
@@ -31,3 +33,15 @@ class InMemoryRepository(Repository):
 
         obj.id = str(uuid4())
         self._objects.append(obj)
+
+    def get_all(self):
+        return self._objects
+
+
+class Repositories:
+    def __init__(self):
+        self.workouts = WorkoutRepository()
+
+
+class WorkoutRepository(InMemoryRepository):
+    model = Workout

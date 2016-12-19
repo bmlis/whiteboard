@@ -1,5 +1,8 @@
-# -*- coding: utf-8 -*-
-from whiteboard import app
+from whiteboard.app import create_app, ApplicationContext
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+context = ApplicationContext()
+application = create_app(context)
+
+
+if __name__ == '__main__':
+    application.run('0.0.0.0')
