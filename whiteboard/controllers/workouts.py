@@ -3,6 +3,7 @@ import json
 from flask import Blueprint, g, request
 from flask_restful import Api, Resource
 
+from .schemas.workout import WorkoutSchema
 from whiteboard.models import Workout
 
 workouts_blueprint = Blueprint('workouts', __name__)
@@ -15,9 +16,14 @@ class WorkoutResource(Resource):
         serialized_workout = request.get_json()
         workout = Workout(activity_type=serialized_workout['activity_type'])
         g.repositories.workouts.store(workout)
-        return 'Hello?', 201
+        result = WorkoutSchema().dump(workout).data
+        return result, 201
 
     def get(self):
-        return json.dumps([m.activity_type for m in g.repositories.workouts.get_all()])
+        workouts = g.repositories.workouts.get_all()
+        result = WorkoutSchema(many=True).dump(workouts).data
+        return json.dumps(
+            {'items': result}
+        )
 
 workouts_api.add_resource(WorkoutResource, '/workouts')
