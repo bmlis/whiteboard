@@ -1,4 +1,0 @@
-test_job:
-  script:
-    - echo 'Running tests'
-    - docker-compose
