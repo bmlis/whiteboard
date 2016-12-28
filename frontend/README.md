@@ -1,0 +1,2 @@
+# Whiteboard frontend
+Beep boop
