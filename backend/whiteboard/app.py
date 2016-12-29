@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import Flask, g
+from flask_cors import CORS
 
 from whiteboard.controllers import public
 from whiteboard.controllers.workouts import workouts_blueprint
@@ -13,6 +14,7 @@ class ApplicationContext:
 
 def create_app(context, debug=False):
     app = Flask(__name__)
+    CORS(app)
 
     @app.before_request
     def before_request():

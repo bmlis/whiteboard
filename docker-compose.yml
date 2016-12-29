@@ -1,0 +1,23 @@
+version: '2.1'
+services:
+  backend:
+    build:
+      context: ./backend/
+      dockerfile: ./docker/Dockerfile
+    command: bash -c 'pip install -e . && python run.py'
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./backend/:/usr/src/app/
+
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: ./docker/Dockerfile
+    command: bash -c 'npm install && npm start'
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./frontend/:/usr/src/app/
+    extra_hosts:
+      - "backend:backend"

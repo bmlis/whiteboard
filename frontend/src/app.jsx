@@ -4,29 +4,29 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import React from 'react';
+import config from 'config';
 
-const serverURL = "backend";
+/* const serverURL = "http://localhost:5000";*/
 
 export default class App extends React.Component {
     state = {
         workouts: []
     }
 
-    componentDidMount() {
-        console.log(`${serverURL}/workouts`);
-        fetch(`${serverURL}/workouts`).then(
-            (response) => {
-                // should be json
-                return response; // .json();
-            }
+    reloadWorkouts = () => {
+        fetch(
+            `${config.serverURL}/workouts`
         ).then(
-            (data) => {
-                console.log(data);
-                this.setState({
-                    workouts: data.items
-                })
-            }
+            (response) => response.json()
+        ).then(
+            (json) => JSON.parse(json)
+        ).then(
+            (data) => this.setState({workouts: data.items})
         )
+    }
+
+    componentDidMount() {
+        this.reloadWorkouts()
     };
 
     render() {
@@ -34,7 +34,7 @@ export default class App extends React.Component {
             <MuiThemeProvider>
                 <div>
                     <WorkoutList workouts={this.state.workouts} />
-                    <WorkoutForm />
+                    <WorkoutForm reloadWorkouts={this.reloadWorkouts} />
                 </div>
             </MuiThemeProvider>
         )
@@ -44,29 +44,40 @@ export default class App extends React.Component {
 
 class WorkoutForm extends React.Component {
     state = {
-        open: false,
+        activity_type: '',
     };
 
     handleSubmit = (event) => {
         event.preventDefault();
+        fetch(`${config.serverURL}/workouts`,{
+            method: "POST",
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({'activity_type': this.state.activity_type})
+
+        }).then((response) => this.props.reloadWorkouts())
     };
 
+    handleActivityTypeChange = (event) => {
+        this.setState({activity_type: event.target.value})
+    }
+
     render() {
-        const items = ["dupa"];
-        const buttonStyle = {
-            margin: 12
-        }
         return (
             <div>
                 <form onSubmit={this.handleSubmit}>
                     <TextField
                         hintText="Activity type"
                         floatingLabelText="ActivityType"
+                        value={this.state.activity_type}
+                        onChange={this.handleActivityTypeChange}
                     /><br />
                     <div>
                         <RaisedButton
-                            label="Default"
-                            style={buttonStyle}
+                            label="Submit"
+                            style={{margin: 12}}
                             type="submit"
                         />
                     </div>

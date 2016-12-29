@@ -51,7 +51,10 @@ module.exports = {
 		filename: 'bundle.js'
 	},
 	resolve: {
-		extensions: ['', '.js', '.jsx']
+	    extensions: ['', '.js', '.jsx'],
+            alias: {
+                config: path.join(__dirname, 'src/config/dev.js')
+            }
 	},
 	module: {
 		loaders
