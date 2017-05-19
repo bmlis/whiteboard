@@ -1,0 +1,9 @@
+{
+    "pipeline": ["test"],
+    "stages": {
+        "test": {
+            "compose_file": "docker/docker-compose.pipeline.yml",
+            "service": "tests"
+        }
+    }
+}
